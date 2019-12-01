@@ -13,30 +13,33 @@ logging.config.fileConfig('logging.cfg')
 def cache_put(key, value):
     cache = redis.Redis('rediska', port=6379)
     cache.ping()
+    logging.debug('put key %s with value %s\n', key, value)
     if cache.exists(key):
+        logging.info('key %s was already cached\n', key)
         return True
     else:
         cache.set(key, value)
         return False
 
 def cache_get(key):
-    logging.debug("Get for key [%s]", key)
+    logging.debug("get for key [%s]", key)
     cache = redis.Redis('rediska', port=6379)
     cache.ping()
     if cache.exists(key):
         return cache.get(key)
     else:
-        logging.error('DB no data for key: ' + request.values.get('key'))
+        logging.error('no data in database for key [' + request.values.get('key') + ']\n')
         return None
 
 def cache_delete(key):
-    logging.debug('delete for key %s', key)
+    logging.debug('delete for key %s\n', key)
     cache = redis.Redis('rediska', port=6379)
     cache.ping()
     if cache.exists(key):
         cache.delete(key)
         return True
     else:
+        logging.warning('no data in database for key [%s]\n', key)
         return False
 
 app = Flask(__name__)
@@ -51,8 +54,8 @@ def storage_server():
         if request.headers.get('Content-Type') != 'application/json':
             return 'Wrong Content-Type, application/json is required\n', 400
         val = request.data 
-        if cache_put(key, val): return 'OK', 200
-        else: return 'Created', 201
+        if cache_put(key, val): return 'Already Exists\n', 200
+        else: return 'Created\n', 201
     elif request.method == 'GET':
         res = cache_get(key)
         if res is None: return 'Value by this Key is not exist\n'
@@ -60,7 +63,7 @@ def storage_server():
 
     elif request.method == 'DELETE':
         if cache_delete(key): 
-            return 'OK', 200
+            return 'OK\n', 200
         else:
             return 'Value by this Key is not exist\n', 404
     
