@@ -1,4 +1,4 @@
-# pracmin_task9.2
+# pracmin_task_9.2_and_task_9.3
 rest_server
 
 ```
@@ -52,3 +52,57 @@ Date: Mon, 11 Nov 2019 14:03:55 GMT
 {"Max":"Scherbakov"}Connection closed by foreign host.
 
 ```
+testing (9.3)
+```
+bnaich:~/Desktop/pracmin/travis/pracmin_task_9.2$ pytest-3 tester.py -s
+======================================== test session starts ========================================
+platform linux -- Python 3.6.8, pytest-3.3.2, py-1.5.2, pluggy-0.6.0
+rootdir: /home/bnaich/Desktop/pracmin/travis/pracmin_task_9.2, inifile:
+collected 5 items                                                                                   
+
+tester.py 2019-12-01 21:31:18,627 - root - INFO - 
+-----TEST_begin----
+PUT Max Scherbakov Created
+ full_request=PUT http://localhost:2000/storage_server?key=Max Scherbakov
+------TEST_end------
+
+.............
+
+2019-12-01 21:31:18,736 - root - INFO - 
+-----TEST_begin----
+DELETE 2  Value by this Key is not exist
+ full_request=DELETE http://localhost:2000/storage_server?key=2
+------TEST_end------
+
+2019-12-01 21:31:18,740 - root - INFO - 
+-----TEST_begin----
+DELETE 3  Value by this Key is not exist
+ full_request=DELETE http://localhost:2000/storage_server?key=3
+------TEST_end------
+
+.                                                                               [100%]
+
+===================================== 5 passed in 0.18 seconds ======================================
+```
+
+```
+....
+echo_server_1  | 2019-12-01 18:14:41,977 - werkzeug - INFO - 172.20.0.1 - - [01/Dec/2019 18:14:41] "DELETE /storage_server?key=3 HTTP/1.1" 200 -
+echo_server_1  | 2019-12-01 18:14:41,979 - root - DEBUG - delete for key 1
+echo_server_1  | 
+echo_server_1  | 2019-12-01 18:14:41,980 - root - WARNING - no data in database for key [1]
+echo_server_1  | 
+echo_server_1  | 2019-12-01 18:14:41,980 - werkzeug - INFO - 172.20.0.1 - - [01/Dec/2019 18:14:41] "DELETE /storage_server?key=1 HTTP/1.1" 404 -
+echo_server_1  | 2019-12-01 18:14:41,983 - root - DEBUG - delete for key 2
+echo_server_1  | 
+echo_server_1  | 2019-12-01 18:14:41,984 - root - WARNING - no data in database for key [2]
+echo_server_1  | 
+echo_server_1  | 2019-12-01 18:14:41,985 - werkzeug - INFO - 172.20.0.1 - - [01/Dec/2019 18:14:41] "DELETE /storage_server?key=2 HTTP/1.1" 404 -
+echo_server_1  | 2019-12-01 18:14:41,988 - root - DEBUG - delete for key 3
+echo_server_1  | 
+echo_server_1  | 2019-12-01 18:14:41,989 - root - WARNING - no data in database for key [3]
+echo_server_1  | 
+echo_server_1  | 2019-12-01 18:14:41,989 - werkzeug - INFO - 172.20.0.1 - - [01/Dec/2019 18:14:41] "DELETE /storage_server?key=3 HTTP/1.1" 404 -
+
+```
+
